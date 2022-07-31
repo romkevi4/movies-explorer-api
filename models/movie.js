@@ -1,12 +1,9 @@
 const mongoose = require('mongoose');
-// const bcrypt = require('bcryptjs');
-const isEmail = require('validator/lib/isEmail');
 const isURL = require('validator/lib/isURL');
 
-// const UnauthorizedError = require('../errors/unauthorizedErr');
-// const { MESSAGE } = require('../utils/responseInfo');
+const { MESSAGE } = require('../utils/responseInfo');
 
-// Схема для данных пользователя
+// Схема для данных фильма
 const movieSchema = new mongoose.Schema({
   country: {
     type: String,
@@ -21,7 +18,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
   },
   year: {
-    type: Number, // TODO: или String?
+    type: String,
     required: true,
   },
   description: {
@@ -64,8 +61,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
   },
   movieId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'user',
+    type: Number,
     required: true,
   },
   nameRU: {

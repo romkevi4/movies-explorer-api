@@ -8,7 +8,7 @@ const cors = require('cors');
 
 const routes = require('./routes/index');
 const usersRouter = require('./routes/users');
-const cardsRouter = require('./routes/cards');
+const moviesRouter = require('./routes/movies');
 
 const { auth } = require('./middlewares/auth');
 const { handleErrors } = require('./middlewares/handleErrors');
@@ -17,7 +17,7 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { MESSAGE } = require('./utils/responseInfo');
 const NotFoundError = require('./errors/notFoundErr');
 
-const { PORT = 3001, MONGO_DB = 'mongodb://localhost:27017/mestodb' } = process.env;
+const { PORT = 3001, MONGO_DB = 'mongodb://localhost:27017/moviesdb' } = process.env;
 const { optionsCors } = require('./utils/optionsCors');
 
 const app = express();
@@ -38,7 +38,7 @@ app.use(routes);
 app.use(auth);
 
 app.use('/users', usersRouter);
-app.use('/cards', cardsRouter);
+app.use('/movies', moviesRouter);
 
 app.use((req, res, next) => {
   next(new NotFoundError(MESSAGE.PATH_NOT_FOUND));
