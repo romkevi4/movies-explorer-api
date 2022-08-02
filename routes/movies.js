@@ -1,68 +1,12 @@
-const router = require('express').Router();
-const { celebrate, Joi } = require('celebrate');
+const movieRouter = require('express').Router();
 
 const { getMovies, createMovie, deleteMovie } = require('../controllers/movies');
-const { urlRegex } = require('../utils/urlRegex');
+const { createMovieValidation } = require('../utils/validationWithJoi');
+const { deleteMovieValidation } = require('../utils/validationWithJoi');
 
 // Роутинг данных фильмов
-router.get('/', getMovies);
+movieRouter.get('/movies', getMovies);
+movieRouter.post('/movies', createMovieValidation, createMovie);
+movieRouter.delete('/movies/:movieId', deleteMovieValidation, deleteMovie);
 
-router.post('/', celebrate({
-  body: Joi.object().keys({
-    country: Joi
-      .string()
-      .required(),
-    director: Joi
-      .string()
-      .required(),
-    duration: Joi
-      .number()
-      .required(),
-    year: Joi
-      .string()
-      .required(),
-    description: Joi
-      .string()
-      .required(),
-    image: Joi
-      .string()
-      .pattern(urlRegex)
-      .required(),
-    trailerLink: Joi
-      .string()
-      .pattern(urlRegex)
-      .required(),
-    thumbnail: Joi
-      .string()
-      .pattern(urlRegex)
-      .required(),
-    owner: Joi
-      .string()
-      .alphanum()
-      .length(24)
-      .hex()
-      .required(),
-    movieId: Joi
-      .number()
-      .required(),
-    nameRU: Joi
-      .string()
-      .required(),
-    nameEN: Joi
-      .string()
-      .required(),
-  }),
-}), createMovie);
-
-router.delete('/:movieId', celebrate({
-  params: Joi.object().keys({
-    movieId: Joi
-      .string()
-      .alphanum()
-      .length(24)
-      .hex()
-      .required(),
-  }),
-}), deleteMovie);
-
-module.exports = router;
+module.exports = movieRouter;

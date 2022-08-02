@@ -3,7 +3,7 @@ const ConflictError = require('../errors/conflictErr');
 const BadRequestError = require('../errors/badRequestErr');
 
 // Определение ошибки
-module.exports.chooseErrorType = (err, next) => {
+module.exports.chooseError = (err, next) => {
   if (err.code === MONGO_CODE.ERROR_DUPLICATE) {
     next(new ConflictError(MESSAGE.ERROR_DUPLICATE_EMAIL_USER));
 

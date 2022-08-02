@@ -3,13 +3,11 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
 
-const { NODE_ENV, JWT_SECRET } = process.env;
+const { NODE_ENV, JWT_SECRET, SECRET_KEY } = require('../config');
 
 const { STATUS_CODE, MESSAGE, SALT_HASH } = require('../utils/responseInfo');
-const { chooseErrorType } = require('../utils/chooseErrorType');
+const { chooseError } = require('../utils/chooseError');
 
-
-// const BadRequestError = require('../errors/badRequestErr');
 const UnauthorizedError = require('../errors/unauthorizedErr');
 const NotFoundError = require('../errors/notFoundErr');
 const ConflictError = require('../errors/conflictErr');
@@ -55,15 +53,7 @@ module.exports.createUser = (req, res, next) => {
         throw new ConflictError(MESSAGE.ERROR_DUPLICATE_EMAIL_USER);
       }
     })
-    .catch((err) => chooseErrorType(err, next));
-    //   if (err.code === MONGO_CODE.ERROR_DUPLICATE) {
-    //     next(new ConflictError(MESSAGE.ERROR_DUPLICATE_EMAIL_USER));
-    //   } else if (err.name === 'ValidationError') {
-    //     next(new BadRequestError(MESSAGE.ERROR_INCORRECT_DATA));
-    //   } else {
-    //     next(err);
-    //   }
-    // });
+    .catch((err) => chooseError(err, next));
 };
 
 // Авторизация
@@ -74,7 +64,7 @@ module.exports.login = (req, res, next) => {
     .then((user) => {
       const token = jwt.sign(
         { _id: user._id },
-        NODE_ENV === 'production' ? JWT_SECRET : 'some-secret-key',
+        NODE_ENV === 'production' ? JWT_SECRET : SECRET_KEY,
         { expiresIn: '7d' },
       );
 
@@ -98,13 +88,7 @@ module.exports.updateUserData = (req, res, next) => {
         throw new NotFoundError(MESSAGE.USER_NOT_FOUND);
       }
 
-      res.send({ data: user });
+      res.send(user);
     })
-    .catch((err) => chooseErrorType(err, next));
-    //   if (err.name === 'ValidationError') {
-    //     next(new BadRequestError(MESSAGE.ERROR_INCORRECT_DATA));
-    //   } else {
-    //     next(err);
-    //   }
-    // });
+    .catch((err) => chooseError(err, next));
 };

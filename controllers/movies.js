@@ -1,16 +1,16 @@
 const Movie = require('../models/Movie');
 
 const { STATUS_CODE, MESSAGE } = require('../utils/responseInfo');
-const { chooseErrorType } = require('../utils/chooseErrorType');
+const { chooseError } = require('../utils/chooseError');
 
-// const BadRequestError = require('../errors/badRequestErr');
 const ForbiddenError = require('../errors/forbiddenErr');
 const NotFoundError = require('../errors/notFoundErr');
+const ConflictError = require("../errors/conflictErr");
 
 // Возвращение всех карточек с фильмами
 module.exports.getMovies = (req, res, next) => {
   Movie.find({})
-    .then((movies) => res.send({ data: movies }))
+    .then((movies) => res.send(movies))
     .catch(next);
 };
 
@@ -32,33 +32,34 @@ module.exports.createMovie = (req, res, next) => {
   } = req.body;
   const { _id } = req.user;
 
-  Movie.create({
-    country,
-    director,
-    duration,
-    year,
-    description,
-    image,
-    trailerLink,
-    thumbnail,
-    owner: _id,
-    movieId,
-    trailer,
-    nameRU,
-    nameEN,
-  })
-    .then((movie) => {
-      res
-        .status(STATUS_CODE.CREATED)
-        .send({ data: movie });
+  Movie.findOne({ nameEN, nameRU })
+    .then((movieSaved) => {
+      if (!movieSaved) {
+        Movie.create({
+          country,
+          director,
+          duration,
+          year,
+          description,
+          image,
+          trailerLink,
+          thumbnail,
+          owner: _id,
+          movieId,
+          trailer,
+          nameRU,
+          nameEN,
+        })
+          .then((movie) => {
+            res
+              .status(STATUS_CODE.CREATED)
+              .send(movie);
+          });
+      } else {
+        throw new ConflictError(MESSAGE.ERROR_DUPLICATE_MOVIE_CARD);
+      }
     })
-    .catch((err) => chooseErrorType(err, next));
-    //   if (err.name === 'ValidationError') {
-    //     next(new BadRequestError(MESSAGE.ERROR_INCORRECT_DATA));
-    //   } else {
-    //     next(err);
-    //   }
-    // });
+    .catch((err) => chooseError(err, next));
 };
 
 // Удаление карточки с фильмом
@@ -70,22 +71,16 @@ module.exports.deleteMovie = (req, res, next) => {
     .then((movie) => {
       if (!movie || !movieId) {
         throw new NotFoundError(MESSAGE.CARD_NOT_FOUND);
-      } else if (_id === Movie.owner.toString()) {
+      } else if (_id === movie.owner.toString()) {
         Movie.findByIdAndDelete(movieId)
           .then(() => {
             res
               .status(STATUS_CODE.OK)
-              .send({ data: movie });
+              .send(movie);
           });
       } else {
         throw new ForbiddenError(MESSAGE.ERROR_DELETE_CARD);
       }
     })
-    .catch((err) => chooseErrorType(err, next));
-    //   if (err.path === '_id' || err.name === 'CastError') {
-    //     next(new BadRequestError(MESSAGE.ERROR_INCORRECT_ID));
-    //   } else {
-    //     next(err);
-    //   }
-    // });
+    .catch((err) => chooseError(err, next));
 };

@@ -1,23 +1,11 @@
-const router = require('express').Router();
-const { celebrate, Joi } = require('celebrate');
+const userRouter = require('express').Router();
 
 const { getUserData, updateUserData } = require('../controllers/users');
+const { updateUserDataValidation } = require('../utils/validationWithJoi');
+
 
 // Роутинг данных пользователя
-router.get('/me', getUserData);
+userRouter.get('/users/me', getUserData);
+userRouter.patch('/users/me', updateUserDataValidation, updateUserData);
 
-router.patch('/me', celebrate({
-  body: Joi.object().keys({
-    name: Joi
-      .string()
-      .min(2)
-      .max(30)
-      .required(),
-    email: Joi
-      .string()
-      .email()
-      .required(),
-  }),
-}), updateUserData);
-
-module.exports = router;
+module.exports = userRouter;
