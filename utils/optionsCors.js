@@ -5,8 +5,8 @@ module.exports.optionsCors = {
   origin: [
     'http://localhost:3000',
     'localhost:3000',
-    'https://mesto.shatskikh.nomoredomains.xyz',
-    'http://mesto.shatskikh.nomoredomains.xyz',
+    'https://movies-search.shatskikh.nomoredomains.sbs',
+    'http://movies-search.shatskikh.nomoredomains.sbs',
   ],
   credentials: true,
   optionsSuccessStatus: STATUS_CODE.OK,

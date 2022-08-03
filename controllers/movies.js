@@ -1,4 +1,4 @@
-const Movie = require('../models/Movie');
+const Movie = require('../models/movie');
 
 const { STATUS_CODE, MESSAGE } = require('../utils/responseInfo');
 const { chooseError } = require('../utils/chooseError');
