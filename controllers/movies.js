@@ -5,7 +5,7 @@ const { chooseError } = require('../utils/chooseError');
 
 const ForbiddenError = require('../errors/forbiddenErr');
 const NotFoundError = require('../errors/notFoundErr');
-const ConflictError = require("../errors/conflictErr");
+const ConflictError = require('../errors/conflictErr');
 
 // Возвращение всех карточек с фильмами
 module.exports.getMovies = (req, res, next) => {

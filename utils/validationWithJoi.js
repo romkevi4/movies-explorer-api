@@ -1,5 +1,5 @@
 const { celebrate, Joi } = require('celebrate');
-const { urlRegex } = require('../utils/urlRegex');
+const { urlRegex } = require('./urlRegex');
 
 // Валидация при создании пользователя
 const createUserValidation = celebrate({
@@ -19,7 +19,7 @@ const createUserValidation = celebrate({
   }),
 });
 
- // Валидация при аутентификации
+// Валидация при аутентификации
 const loginValidation = celebrate({
   body: Joi.object().keys({
     email: Joi

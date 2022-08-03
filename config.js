@@ -13,4 +13,4 @@ module.exports = {
   NODE_ENV,
   JWT_SECRET,
   SECRET_KEY,
-}
+};

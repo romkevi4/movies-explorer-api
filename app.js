@@ -8,7 +8,7 @@ const cors = require('cors');
 
 const routes = require('./routes/index');
 
-const { resourceNotFound } = require('./middlewares/resourceNotFound');
+const { appNotFound } = require('./middlewares/appNotFound');
 const { handleErrors } = require('./middlewares/handleErrors');
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -30,7 +30,7 @@ app.use(requestLogger);
 
 app.use(routes);
 
-app.use(resourceNotFound);
+app.use(appNotFound);
 
 app.use(errorLogger);
 
