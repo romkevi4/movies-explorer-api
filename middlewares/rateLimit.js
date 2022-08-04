@@ -7,5 +7,5 @@ module.exports.limiter = rateLimit({
   max: 100,
   standardHeaders: true,
   legacyHeaders: false,
-  message: MESSAGE.REQUEST_LIMIT
+  message: MESSAGE.REQUEST_LIMIT,
 });
