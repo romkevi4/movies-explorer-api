@@ -8,6 +8,7 @@ const cors = require('cors');
 
 const routes = require('./routes/index');
 
+const { limiter } = require('./middlewares/rateLimit');
 const { appNotFound } = require('./middlewares/appNotFound');
 const { handleErrors } = require('./middlewares/handleErrors');
 
@@ -27,6 +28,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet());
 
 app.use(requestLogger);
+
+app.use(limiter);
 
 app.use(routes);
 

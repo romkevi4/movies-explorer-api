@@ -29,6 +29,7 @@ module.exports.MESSAGE = {
   URL_INCORRECT: 'Введенный url не корректен',
   SERVER_ERROR: 'На сервере произошла ошибка',
   DATA_UNAUTHORIZED: 'Введенные почта или пароль неправильные',
+  REQUEST_LIMIT: 'Превышено допустимое количество запросов в единицу времени',
   CORRECT: 'Всё верно',
 };
 
