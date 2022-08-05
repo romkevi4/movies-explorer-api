@@ -48,7 +48,8 @@ module.exports.createUser = (req, res, next) => {
                 email: user.email,
                 _id: user._id,
               });
-          });
+          })
+          .catch((err) => chooseError(err, next));
       } else {
         throw new ConflictError(MESSAGE.ERROR_DUPLICATE_EMAIL_USER);
       }

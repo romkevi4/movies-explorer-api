@@ -77,12 +77,6 @@ const createMovieValidation = celebrate({
       .string()
       .pattern(urlRegex)
       .required(),
-    owner: Joi
-      .string()
-      .alphanum()
-      .length(24)
-      .hex()
-      .required(),
     movieId: Joi
       .number()
       .required(),

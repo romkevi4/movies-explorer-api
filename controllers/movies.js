@@ -7,11 +7,13 @@ const ForbiddenError = require('../errors/forbiddenErr');
 const NotFoundError = require('../errors/notFoundErr');
 const ConflictError = require('../errors/conflictErr');
 
-// Возвращение всех карточек с фильмами
+// Возвращение всех сохранённых пользователем карточек с фильмами
 module.exports.getMovies = (req, res, next) => {
-  Movie.find({})
+  const { _id } = req.user;
+
+  Movie.find({ owner: _id })
     .then((movies) => res.send(movies))
-    .catch(next);
+    .catch((err) => chooseError(err, next));
 };
 
 // Создание карточки с фильмом
@@ -32,32 +34,25 @@ module.exports.createMovie = (req, res, next) => {
   } = req.body;
   const { _id } = req.user;
 
-  Movie.findOne({ nameEN, nameRU })
-    .then((movieSaved) => {
-      if (!movieSaved) {
-        Movie.create({
-          country,
-          director,
-          duration,
-          year,
-          description,
-          image,
-          trailerLink,
-          thumbnail,
-          owner: _id,
-          movieId,
-          trailer,
-          nameRU,
-          nameEN,
-        })
-          .then((movie) => {
-            res
-              .status(STATUS_CODE.CREATED)
-              .send(movie);
-          });
-      } else {
-        throw new ConflictError(MESSAGE.ERROR_DUPLICATE_MOVIE_CARD);
-      }
+  Movie.create({
+    country,
+    director,
+    duration,
+    year,
+    description,
+    image,
+    trailerLink,
+    thumbnail,
+    owner: _id,
+    movieId,
+    trailer,
+    nameRU,
+    nameEN,
+  })
+    .then((movie) => {
+      res
+        .status(STATUS_CODE.CREATED)
+        .send(movie);
     })
     .catch((err) => chooseError(err, next));
 };
@@ -65,19 +60,20 @@ module.exports.createMovie = (req, res, next) => {
 // Удаление карточки с фильмом
 module.exports.deleteMovie = (req, res, next) => {
   const { movieId } = req.params;
-  const { _id } = req.user;
+  const userId = req.user._id;
 
-  Movie.findById(movieId)
+  Movie.findById({ _id: movieId })
     .then((movie) => {
       if (!movie || !movieId) {
         throw new NotFoundError(MESSAGE.CARD_NOT_FOUND);
-      } else if (_id === movie.owner.toString()) {
-        Movie.findByIdAndDelete(movieId)
-          .then(() => {
+      } else if (userId === movie.owner.toString()) {
+        Movie.findByIdAndDelete({ _id: movieId })
+          .then((deleteMovie) => {
             res
               .status(STATUS_CODE.OK)
-              .send(movie);
-          });
+              .send(deleteMovie);
+          })
+          .catch((err) => chooseError(err, next));
       } else {
         throw new ForbiddenError(MESSAGE.ERROR_DELETE_CARD);
       }

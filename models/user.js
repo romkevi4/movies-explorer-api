@@ -11,7 +11,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     minlength: 2,
     maxlength: 30,
-    default: 'Your name',
     required: true,
   },
   email: {

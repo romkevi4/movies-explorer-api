@@ -9,7 +9,6 @@ const cors = require('cors');
 const routes = require('./routes/index');
 
 const { limiter } = require('./middlewares/rateLimit');
-const { appNotFound } = require('./middlewares/appNotFound');
 const { handleErrors } = require('./middlewares/handleErrors');
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -32,8 +31,6 @@ app.use(requestLogger);
 app.use(limiter);
 
 app.use(routes);
-
-app.use(appNotFound);
 
 app.use(errorLogger);
 
