@@ -7,6 +7,7 @@ module.exports.optionsCors = {
     'localhost:3000',
     'https://movies-search.shatskikh.nomoredomains.sbs',
     'http://movies-search.shatskikh.nomoredomains.sbs',
+    'https://api.nomoreparties.co/beatfilm-movies',
   ],
   credentials: true,
   optionsSuccessStatus: STATUS_CODE.OK,

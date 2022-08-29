@@ -1,4 +1,4 @@
-const PORT_DEFAULT = 3000;
+const PORT_DEFAULT = 3001;
 const PORT = process.env.PORT || PORT_DEFAULT;
 
 const MONGO_DB_DEFAULT = 'mongodb://localhost:27017/moviesdb';
