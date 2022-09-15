@@ -7,6 +7,8 @@ module.exports.optionsCors = {
     'localhost:3001',
     'https://movies-search.shatskikh.nomoredomains.sbs',
     'http://movies-search.shatskikh.nomoredomains.sbs',
+    'https://api.movies-search.sh.nomoredomains.sbs/',
+    'http://api.movies-search.sh.nomoredomains.sbs/',
     'https://api.nomoreparties.co/beatfilm-movies',
     'http://api.nomoreparties.co/beatfilm-movies',
   ],
